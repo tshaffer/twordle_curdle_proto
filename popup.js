@@ -17,6 +17,7 @@ changeColor.addEventListener("click", async () => {
 
 chrome.runtime.onMessage.addListener(
   function (request) {
+    console.log('extension onMessage.addListener invoked, received:');
     console.log(request);
   }
 );
@@ -32,20 +33,20 @@ function setPageBackgroundColor() {
 
     document.body.addEventListener("keydown", async (event) => {
 
+      console.log('content script keydown handler invoked');
+
       const key = event.key.toUpperCase();
-      if (key.length !== 1) {
-        return;
-      }
+      if (key.length === 1) {
 
-      const isLetter = (key >= 'A' && key <= 'Z');
+        const isLetter = (key >= 'A' && key <= 'Z');
 
-      if (isLetter) {
-        const keyDownMessage = { keyDown: key };
-        console.log('Send');
-        console.log(keyDownMessage);
-        chrome.runtime.sendMessage(keyDownMessage);
+        if (isLetter) {
+          const keyDownMessage = { keyDown: key };
+          console.log('send: ', keyDownMessage);
+          chrome.runtime.sendMessage(keyDownMessage);
+        }
+        event.preventDefault();
       }
-      event.preventDefault();
     });
   });
 }

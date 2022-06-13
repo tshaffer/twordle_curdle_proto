@@ -1,6 +1,6 @@
 {
   "name": "Twordle Curdle",
-  "description": "Build an Extension!",
+  "description": "Wordle assistant",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
