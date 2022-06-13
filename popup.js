@@ -20,31 +20,54 @@ chrome.runtime.onMessage.addListener(
     console.log(sender.tab ?
       "from a content script:" + sender.tab.url :
       "from the extension");
-    alert('received message in popup.js');
-    alert(request.greeting);
+    // alert('received message in popup.js');
+    // alert(request.greeting);
     if (request.greeting === "hello") {
       sendResponse({ farewell: "goodbye" });
     }
   }
 );
 
-// The body of this function will be executed as a content script inside the
-// current page
+// The body of this function will be executed as a content script inside the current page
 function setPageBackgroundColor() {
   chrome.storage.sync.get("color", ({ color }) => {
     document.body.style.backgroundColor = color;
 
-    document.body.addEventListener("click", async () => {
-      alert("Click event on web page");
-    });
+    // document.body.addEventListener("click", async () => {
+    //   alert("Click event on web page");
+    // });
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+    // https://stackoverflow.com/questions/2257070/detect-numbers-or-letters-with-jquery-javascript
     document.body.addEventListener("keydown", async (event) => {
-      console.log("keyboard event");
-      console.log(event.code);
-      console.log(event);
-      alert("New Keyboard event on document");
-      alert(event);
-      alert(event.code);
+
+
+      const key = event.key.toUpperCase();
+      if (key.length !== 1) {
+        return;
+      }
+      
+      const isLetter = (key >= 'A' && key <= 'Z');
+      
+      if (isLetter) {
+        // Do something
+        console.log(key);
+      }
+      // console.log("keyboard event");
+      // console.log(event.code);
+      // console.log(event);
+      // // alert("New Keyboard event on document");
+      // // alert(event);
+      // // alert(event.code);
+
+      // const textContent = "event.code is: "+ ` ${event.code}`;
+      // // alert(textContent);
+      // console.log(textContent);
+
+      // // discard when event.keyt is any of the following
+      // //  'Shift'
+      // //  'Meta'
+
       event.preventDefault();
     });
 
