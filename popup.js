@@ -16,24 +16,16 @@ changeColor.addEventListener("click", async () => {
 });
 
 chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-    console.log(sender.tab ?
-      "from a content script:" + sender.tab.url :
-      "from the extension");
+  function (request) {
     console.log(request);
-    // alert('received message in popup.js');
-    // alert(request.greeting);
-    if (request.greeting === "hello") {
-      sendResponse({ farewell: "goodbye" });
-    }
   }
 );
 
-// The body of this function will be executed as a content script inside the current page
+
+// CONTENT SCRIPT
 function setPageBackgroundColor() {
   chrome.storage.sync.get("color", ({ color }) => {
     document.body.style.backgroundColor = color;
-
 
     // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
     // https://stackoverflow.com/questions/2257070/detect-numbers-or-letters-with-jquery-javascript
@@ -48,15 +40,10 @@ function setPageBackgroundColor() {
       const isLetter = (key >= 'A' && key <= 'Z');
 
       if (isLetter) {
-        console.log(key);
         const keyDownMessage = { keyDown: key };
-        // chrome.runtime.sendMessage({ keyDown: key }, function (response) {
-        chrome.runtime.sendMessage(keyDownMessage, function (response) {
-          // console.log(response.farewell);
-          console.warn('flibbet');
-          // alert('send greeting to background script');
-        });
-
+        console.log('Send');
+        console.log(keyDownMessage);
+        chrome.runtime.sendMessage(keyDownMessage);
       }
       event.preventDefault();
     });
