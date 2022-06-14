@@ -9,11 +9,13 @@ chrome.storage.sync.get("color", ({ color }) => {
 });
 
 // When the button is clicked, inject setPageBackgroundColor into current page
-changeColor.addEventListener("click", async () => {
+changeColor.addEventListener("click", async (event) => {
+
+  console.log(event);
 
   fetch(versionUrl)
     .then(response => response.text())
-    .then(response => flibbet(response));  
+    .then(response => flibbet(response));
 
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -47,6 +49,43 @@ function setPageBackgroundColor() {
     document.body.addEventListener("keydown", async (event) => {
 
       console.log('content script keydown handler invoked');
+
+      console.log(event);
+
+      // const gameTiles = document.getElementsByTagName("game-tile");
+      // console.log('game tiles');
+      // console.log(gameTiles);
+
+      // const tileDivs = document.getElementsByClassName("tile");
+      // console.log('tile divs');
+      // console.log(tileDivs);
+
+      //document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row')[0].shadowRoot.querySelectorAll('game-tile')[0].shadowRoot.querySelectorAll('.tile')[0].getAttribute('data-state')
+      //'correct'
+
+      // document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row')[0].shadowRoot.querySelectorAll('game-tile')[0].getAttribute('evaluation')
+      // 'correct'
+      // document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row')[0].shadowRoot.querySelectorAll('game-tile')[0].getAttribute('letter')
+      // 'a'
+
+      // rows=document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row')
+
+      if (event.key === 'Enter') {
+        const gameRows = document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row');
+        console.log('rows length: ' + gameRows.length);
+        gameRows.forEach((gameRow, rowIndex) => {
+
+          const letters = gameRow.getAttribute('letters');
+          console.log('letters: ' + letters);
+          
+          const gameTiles = gameRow.shadowRoot.querySelectorAll('game-tile');
+
+          gameTiles.forEach((gameTile, gameTileIndex) => {
+            const evaluation = gameTile.getAttribute('evaluation')
+            console.log('evaluation: ', evaluation);
+          });
+        });
+      }
 
       const key = event.key.toUpperCase();
       if (key.length === 1) {
