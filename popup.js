@@ -1,3 +1,6 @@
+const serverUrl = 'http://localhost:8000';
+const versionUrl = serverUrl + '/api/v1/version';
+
 // Initialize button with user's preferred color
 let changeColor = document.getElementById("changeColor");
 
@@ -7,6 +10,11 @@ chrome.storage.sync.get("color", ({ color }) => {
 
 // When the button is clicked, inject setPageBackgroundColor into current page
 changeColor.addEventListener("click", async () => {
+
+  fetch(versionUrl)
+    .then(response => response.text())
+    .then(response => flibbet(response));  
+
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   chrome.scripting.executeScript({
@@ -21,6 +29,11 @@ chrome.runtime.onMessage.addListener(
     console.log(request);
   }
 );
+
+function flibbet(response) {
+  console.log('response to getVersion');
+  console.log(response);
+}
 
 
 // CONTENT SCRIPT
@@ -51,3 +64,4 @@ function setPageBackgroundColor() {
   });
 }
 
+// http://localhost:8000
