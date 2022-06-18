@@ -42,7 +42,6 @@ function executeContentScript() {
     gameRows.forEach((gameRow, rowIndex) => {
 
       const letters = gameRow.getAttribute('letters');
-      console.log('letters: ' + letters);
 
       const enteredLine = {
         letters,
@@ -51,9 +50,8 @@ function executeContentScript() {
 
       const gameTiles = gameRow.shadowRoot.querySelectorAll('game-tile');
 
-      gameTiles.forEach((gameTile, gameTileIndex) => {
+      gameTiles.forEach((gameTile) => {
         const evaluation = gameTile.getAttribute('evaluation')
-        console.log('evaluation: ', evaluation);
         enteredLine.evaluations.push(evaluation);
       });
 
@@ -63,6 +61,10 @@ function executeContentScript() {
 
     console.log('Entered lines');
     console.log(enteredLines);
+
+    const enteredLinesMessage = { enteredLines };
+    console.log('send: ', enteredLinesMessage);
+    chrome.runtime.sendMessage(enteredLinesMessage);
 
   }
 
@@ -78,17 +80,6 @@ function executeContentScript() {
         processEnteredLines();
       }, 1000);
     }
-    // } else {
-    //   const key = event.key.toUpperCase();
-    //   if (key.length === 1) {
-    //     if (key >= 'A' && key <= 'Z') {
-    //       const keyDownMessage = { keyDown: key };
-    //       console.log('send: ', keyDownMessage);
-    //       chrome.runtime.sendMessage(keyDownMessage);
-    //     }
-    //     event.preventDefault();
-    //   }
-    // }
   });
 }
 
