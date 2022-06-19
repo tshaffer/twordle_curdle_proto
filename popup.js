@@ -33,11 +33,23 @@ chrome.tabs.query({ active: true, currentWindow: true })
           body: JSON.stringify(letterTypes),
         })
           .then(response => response.text())
-          .then(response => console.log(response));
+          .then(response => {
+            const candidateWords = JSON.parse(response).words;
+            console.log(candidateWords);
+            const candidateWordsList = document.getElementById('candidateWordsList');
+            for (var i = 0; i < candidateWords.length; i++) {
 
-        // .then(response => response.json())
-        // .then(response => sendResponse(response))
-        // .catch(error => console.log('Error:', error));
+              // Create the list item:
+              var item = document.createElement('li');
+
+              // Set its contents:
+              item.appendChild(document.createTextNode(candidateWords[i]));
+
+              // Add it to the list:
+              candidateWordsList.appendChild(item);
+
+            }
+          })
       }
     );
 
