@@ -40,7 +40,7 @@ chrome.tabs.query({ active: true, currentWindow: true })
 
             // clear previous items
             candidateWordsList.innerHTML = '';
-            
+
             for (var i = 0; i < candidateWords.length; i++) {
 
               // Create the list item:
