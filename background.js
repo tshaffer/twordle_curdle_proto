@@ -5,6 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.action.onClicked.addListener(function(activeTab){
+  console.log('onClicked invoked - create tab');
   var newURL = "twordle.html";
   chrome.tabs.create({ url: newURL });
 });
