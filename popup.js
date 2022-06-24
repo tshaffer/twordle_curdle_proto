@@ -40,7 +40,7 @@ chrome.tabs.query({ active: true, currentWindow: true })
 
             // clear previous items
             candidateWordsList.innerHTML = '';
-            
+
             for (var i = 0; i < candidateWords.length; i++) {
 
               // Create the list item:
@@ -149,28 +149,62 @@ function executeContentScript() {
 
     const enteredLines = [];
 
-    const gameRows = document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row');
+    // console.log('get body');
+    // const body = document.querySelectorAll('body');
+    // console.log(body);
+
+    // const wordleAppGame = document.querySelectorAll('div#wordle-app-game');
+
+
+
+    console.log('attempt to find gameRows');
+    // updated implementation - 6/24/2022
+    const gameRows = document.querySelectorAll('.Row-module_row__dEHfN');
+    //     const gameRow = document.querySelectorAll('.Row-module_row__dEHfN')[0].querySelectorAll(".Tile-module_tile__3ayIZ")
+    //     gameRow[0].getAttribute("data-state") // 'absent', 'correct', 'present'
+    //     gameRow[0].innerHtml
     console.log('rows length: ' + gameRows.length);
-
     gameRows.forEach((gameRow, rowIndex) => {
-
-      const letters = gameRow.getAttribute('letters');
-
-      const enteredLine = {
-        letters,
-        evaluations: []
-      };
-
-      const gameTiles = gameRow.shadowRoot.querySelectorAll('game-tile');
-
-      gameTiles.forEach((gameTile) => {
-        const evaluation = gameTile.getAttribute('evaluation')
-        enteredLine.evaluations.push(evaluation);
+      // const gameRow = document.querySelectorAll('.Row-module_row__dEHfN')[rowIndex].querySelectorAll(".Tile-module_tile__3ayIZ")
+      let letters = '';
+      const evaluations = [];
+      gameRow.childNodes.forEach((gameRowChildNode, letterIndex) => {
+        const realGameRow = gameRowChildNode.childNodes[0];
+        const letterText = realGameRow.innerHTML;
+        const evaluation = realGameRow.getAttribute('data-state');
+        letters += letterText;
+        evaluations.push(evaluation);
+        // console.log('rowIndex: ', rowIndex, ' letterIndex: ', letterIndex, ' evaluation: ', evaluation, ' letterText: ', letterText);
       });
-
-      enteredLines.push(enteredLine);
-
+      console.log('rowIndex: ', rowIndex, 'Guess: ', letters, 'Evaluations: ', evaluations);
     });
+
+
+
+
+
+    // original implementation
+    // const gameRows = document.querySelectorAll('game-app')[0].shadowRoot.querySelectorAll('#game')[0].querySelectorAll('game-row');
+    // console.log('rows length: ' + gameRows.length);
+    // gameRows.forEach((gameRow, rowIndex) => {
+
+    //   const letters = gameRow.getAttribute('letters');
+
+    //   const enteredLine = {
+    //     letters,
+    //     evaluations: []
+    //   };
+
+    //   const gameTiles = gameRow.shadowRoot.querySelectorAll('game-tile');
+
+    //   gameTiles.forEach((gameTile) => {
+    //     const evaluation = gameTile.getAttribute('evaluation')
+    //     enteredLine.evaluations.push(evaluation);
+    //   });
+
+    //   enteredLines.push(enteredLine);
+
+    // });
 
     console.log('Entered lines');
     console.log(enteredLines);
