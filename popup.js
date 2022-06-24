@@ -177,6 +177,11 @@ function executeContentScript() {
         // console.log('rowIndex: ', rowIndex, ' letterIndex: ', letterIndex, ' evaluation: ', evaluation, ' letterText: ', letterText);
       });
       console.log('rowIndex: ', rowIndex, 'Guess: ', letters, 'Evaluations: ', evaluations);
+      const enteredLine = {
+        letters,
+        evaluations
+      };
+      enteredLines.push(enteredLine);
     });
 
 
