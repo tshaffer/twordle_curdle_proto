@@ -1,8 +1,11 @@
 const serverUrl = 'http://localhost:8000';
 const versionUrl = serverUrl + '/api/v1/version';
 const getWordsUrl = serverUrl + '/api/v1/getWordsEndpoint';
+const testDataUrl = 'testData.json';
+const runtimeTestDataUrl = chrome.runtime.getURL(testDataUrl);
 
 getVersion(versionUrl);
+getTestData(runtimeTestDataUrl);
 
 chrome.tabs.query({ active: true, currentWindow: true })
   .then(([tab]) => {
@@ -63,6 +66,28 @@ function getVersion(versionUrl) {
   fetch(versionUrl)
     .then(response => response.text())
     .then(response => console.log(response));
+}
+
+function getTestData(testDataUrl) {
+  console.log('testDataUrl');
+  fetch(testDataUrl)
+  .then(
+    function(response) {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+
+      // Examine the text in the response
+      response.json().then(function(data) {
+        console.log(data);
+      });
+    }
+  )
+  .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+  });
 }
 
 /*
