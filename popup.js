@@ -26,41 +26,50 @@ chrome.tabs.query({ active: true, currentWindow: true })
                   lettersNotInWord: string;
                 }
         */
-        const letterTypes = getLetterTypes(request.enteredLines);
-        fetch(getWordsUrl, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-            'Content-type': 'application/json; charset=UTF-8'
-          },
-          body: JSON.stringify(letterTypes),
-        })
-          .then(response => response.text())
-          .then(response => {
-            const candidateWords = JSON.parse(response).words;
-            console.log(candidateWords);
-            const candidateWordsList = document.getElementById('candidateWordsList');
 
-            // clear previous items
-            candidateWordsList.innerHTML = '';
-
-            for (var i = 0; i < candidateWords.length; i++) {
-
-              // Create the list item:
-              var item = document.createElement('li');
-
-              // Set its contents:
-              item.appendChild(document.createTextNode(candidateWords[i]));
-
-              // Add it to the list:
-              candidateWordsList.appendChild(item);
-
-            }
-          })
+        processEnteredLinesMessage(request.enteredLines);
       }
     );
 
   });
+
+function processEnteredLinesMessage(enteredLines) {
+
+  console.log('processEnteredLinesMessage');
+
+  const letterTypes = getLetterTypes(enteredLines);
+  fetch(getWordsUrl, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify(letterTypes),
+  })
+    .then(response => response.text())
+    .then(response => {
+      const candidateWords = JSON.parse(response).words;
+      console.log(candidateWords);
+      const candidateWordsList = document.getElementById('candidateWordsList');
+
+      // clear previous items
+      candidateWordsList.innerHTML = '';
+
+      for (var i = 0; i < candidateWords.length; i++) {
+
+        // Create the list item:
+        var item = document.createElement('li');
+
+        // Set its contents:
+        item.appendChild(document.createTextNode(candidateWords[i]));
+
+        // Add it to the list:
+        candidateWordsList.appendChild(item);
+
+      }
+    })
+}
+
 
 function getVersion(versionUrl) {
   fetch(versionUrl)
@@ -71,23 +80,24 @@ function getVersion(versionUrl) {
 function getTestData(testDataUrl) {
   console.log('testDataUrl');
   fetch(testDataUrl)
-  .then(
-    function(response) {
-      if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-          response.status);
-        return;
-      }
+    .then(
+      function (response) {
+        if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+          return;
+        }
 
-      // Examine the text in the response
-      response.json().then(function(data) {
-        console.log(data);
-      });
-    }
-  )
-  .catch(function(err) {
-    console.log('Fetch Error :-S', err);
-  });
+        // Examine the text in the response
+        response.json().then(function (data) {
+          console.log(data);
+          // data.enteredLines is the array of enteredLines
+        });
+      }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
 }
 
 /*
