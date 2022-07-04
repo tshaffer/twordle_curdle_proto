@@ -36,8 +36,12 @@ chrome.tabs.query({ active: true, currentWindow: true })
 function processEnteredLinesMessage(enteredLines) {
 
   console.log('processEnteredLinesMessage');
+  console.log(enteredLines);
 
   const letterTypes = getLetterTypes(enteredLines);
+  console.log('letterTypes');
+  console.log(letterTypes);
+
   fetch(getWordsUrl, {
     method: 'POST',
     headers: {
@@ -93,7 +97,7 @@ function getTestData(testDataUrl) {
           console.log(data);
           // data.enteredLines is the array of enteredLines
 
-          processEnteredLinesMessage(data.enteredLines);
+          // processEnteredLinesMessage(data.enteredLines);
         });
       }
     )
@@ -146,13 +150,13 @@ function getLetterTypes(enteredLines) {
         letterAnswerType = 'NotInWord';
       }
 
-      console.log(rowIndex, columnIndex, letterAnswerType);
+      // console.log(rowIndex, columnIndex, letterAnswerType);
 
       letterAnswersInRow.push(letterAnswerType);
 
       const currentCharacter = enteredLine.letters.charAt(columnIndex);
 
-      console.log(rowIndex, columnIndex, currentCharacter, letterAnswerType);
+      // console.log(rowIndex, columnIndex, currentCharacter, letterAnswerType);
 
       switch (letterAnswerType) {
         case 'InWordAtExactLocation':
