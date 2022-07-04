@@ -92,6 +92,8 @@ function getTestData(testDataUrl) {
         response.json().then(function (data) {
           console.log(data);
           // data.enteredLines is the array of enteredLines
+
+          processEnteredLinesMessage(data.enteredLines);
         });
       }
     )
